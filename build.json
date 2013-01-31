@@ -1,0 +1,22 @@
+{
+  "defaultTarget": "all",
+  "properties": {
+    "sourceDir": "src",
+    "buildDir": "build",
+    "binDir": "bin",
+    "vendorDir": "vendor"
+  },
+  "plugins": {},
+  "targets": {
+    "all": {
+      "builder": "js",
+      "resources": [
+        {
+          "type": "files",
+          "root": "${sourceDir}",
+          "include": "\\.js$"
+        }
+      ]
+    }
+  }
+}
