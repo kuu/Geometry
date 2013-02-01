@@ -13,12 +13,23 @@
   benri.geometry.Path = Path;
 
   /**
+   * @class
    * @constructor
    * @param {number} pStartX The start x position
    * @param {number} pStartY The start y position
    */
   function Path(pStartX, pStartY) {
+    /**
+     * Each of the records needed to describe this path.
+     * @type {Array}
+     */
     this.records = [];
+
+    /**
+     * The cached bounds of this Path.
+     * @type {benri.geometry.Rect=null}
+     * @private
+     */
     this._bounds = null;
 
     if (typeof pStartX !== 'number') {
@@ -31,6 +42,10 @@
     this.m(pStartX, pStartY);
   }
 
+  /**
+   * Get a clone of this Path.
+   * @return {benri.geometry.Path} The clone.
+   */
   Path.prototype.clone = function() {
     var tNewPath = new Path(0, 0);
     tNewPath.records = this.records.slice(0);
@@ -39,14 +54,25 @@
     return tNewPath;
   };
 
+  /**
+   * Gets the bounds of this Path.
+   * @return {benri.geometry.Rect} The bounds.
+   */
   Path.prototype.getBoundingRect = function() {
     if (this._bounds !== null) {
       return this._bounds;
     }
 
-    // TODO: Calculate bounds
+    throw new Error('Not implemented');
   };
 
+  /**
+   * Move to the specified location without
+   * joining to the current point.
+   * @param  {number} pX The X location.
+   * @param  {number} pY The Y location.
+   * @return {benri.geometry.Path} This.
+   */
   Path.prototype.moveTo = Path.prototype.m = function(pX, pY) {
     this.records.push({
       type: 'move',
@@ -56,6 +82,13 @@
     return this;
   };
 
+  /**
+   * Move to the specified location while joining
+   * to the current point.
+   * @param  {number} pX The X location.
+   * @param  {number} pY The Y location.
+   * @return {benri.geometry.Path} This.
+   */
   Path.prototype.lineTo = Path.prototype.l = function(pX, pY) {
     this.records.push({
       type: 'line',
@@ -65,6 +98,15 @@
     return this;
   };
 
+  /**
+   * Do a quadratic curve to the specified location while joining
+   * to the current point.
+   * @param {number} pControlX The control X location.
+   * @param {number} pControlY The controlY location.
+   * @param  {number} pX The X location.
+   * @param  {number} pY The Y location.
+   * @return {benri.geometry.Path} This.
+   */
   Path.prototype.quadraticCurveTo = Path.prototype.qc = function(pControlX, pControlY, pX, pY) {
     this.records.push({
       type: 'quadraticCurve',
