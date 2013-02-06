@@ -8,6 +8,7 @@
 (function(global) {
 
   var benri = global.benri;
+  var Math = global.Math;
 
   benri.geometry.Matrix2D = Matrix2D;
 
@@ -124,6 +125,41 @@
   };
 
   /**
+   * Gets the rotation of this matrix in degrees if possible.
+   * @return {number} The rotation in degrees.
+   */
+  Matrix2D.prototype.getRotationInDegrees = function() {
+    // 180 / Math.PI
+    return this.getRotation() * 57.29577951308232;
+  };
+
+  Matrix2D.prototype.getRotation = function() {
+    if (this.d !== 0) {
+      return Math.atan(this.b / this.d);
+    } else if (this.a !== 0) {
+      return Math.atan(-this.c / this.a);
+    } else {
+      return 0;
+    }
+  };
+
+  /**
+   * Gets the X scale of this matrix.
+   * @return {number} The X scale.
+   */
+  Matrix2D.prototype.getScaleX = function() {
+    return Math.sqrt(Math.pow(this.a, 2) + Math.pow(this.c, 2));
+  };
+
+  /**
+   * Gets the Y scale of this matrix.
+   * @return {number} The Y scale.
+   */
+  Matrix2D.prototype.getScaleY = function() {
+    return Math.sqrt(Math.pow(this.b, 2) + Math.pow(this.d, 2));
+  };
+
+  /**
    * Inverse this matrix
    */
   Matrix2D.prototype.inverse = function() {
@@ -147,11 +183,27 @@
   };
 
   /**
-   * Rotates this matrix by the give angle
-   * @param  {number} pAngle The angle in radians
+   * Rotates this matrix by the given angle in degrees.
+   * @param  {number} pDegrees The angle in degrees.
+   */
+  Matrix2D.prototype.rotateInDegrees = function(pDegrees) {
+    // Math.PI / 180;
+    this.rotate(pDegrees * 0.017453292519943295);
+  };
+
+  /**
+   * Rotates this matrix by the given angle in radians.
+   * @param  {number} pAngle The angle in radians.
    */
   Matrix2D.prototype.rotate = function(pAngle) {
-    throw new Error();
+    this.multiply({
+      a: Math.cos(pAngle),
+      b: -Math.sin(pAngle),
+      c: Math.sin(pAngle),
+      d: Math.cos(pAngle),
+      e: 0,
+      f: 0
+    });
   };
 
   /**
