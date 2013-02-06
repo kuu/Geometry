@@ -10,6 +10,7 @@
   global.benri.geometry.Rect = Rect;
 
   var Path = global.benri.geometry.Path;
+  var Point = global.benri.geometry.Point;
 
   /**
    * A class that holds information about a rectangle
@@ -64,5 +65,36 @@
 
     return tPath;
   }
+
+  /**
+   * Merge this rect with the given rect and return the new rect.
+   * @param {benri.geometry.Rect} pRect
+   * @return {benri.geometry.Rect} The merged rect.
+   */
+  Rect.prototype.merge = function(pRect) {
+
+    var tPointA, tPointB,
+        tMinX, tMinY, tMaxX, tMaxY;
+
+    if (pRect) {
+
+      tPointA = this.origin;
+      tPointB = pRect.origin;
+      tMinX = tPointA.x < tPointB.x ? tPointA.x : tPointB.x;
+      tMinY = tPointA.y < tPointB.y ? tPointA.y : tPointB.y;
+
+      tPointA = new Point(this.origin.x + this.width,
+                        this.origin.y + this.height);
+      tPointB = new Point(pRect.x + pRect.width,
+                        pRect.y + pRect.height);
+      tMmaxX = tPointA.x > tPointB.x ? tPointA.x : tPointB.x;
+      tMmaxY = tPointA.y > tPointB.y ? tPointA.y : tPointB.y;
+
+      this.origin.x = tMinX;
+      this.origin.y = tMinY;
+      this.width = tMaxX;
+      this.height = tMaxY;
+    }
+  };
 
 }(this));

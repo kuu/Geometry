@@ -25,13 +25,6 @@
      */
     this.records = [];
 
-    /**
-     * The cached bounds of this Path.
-     * @type {benri.geometry.Rect=null}
-     * @private
-     */
-    this._bounds = null;
-
     if (typeof pStartX !== 'number') {
       pStartX = 0;
     }
@@ -49,7 +42,6 @@
   Path.prototype.clone = function() {
     var tNewPath = new Path(0, 0);
     tNewPath.records = this.records.slice(0);
-    tNewPath._bounds = this._bounds;
 
     return tNewPath;
   };
@@ -59,11 +51,23 @@
    * @return {benri.geometry.Rect} The bounds.
    */
   Path.prototype.getBoundingRect = function() {
-    if (this._bounds !== null) {
-      return this._bounds;
-    }
 
-    throw new Error('Not implemented');
+    var tRecords = this.records, tPoint,
+        tMinX = tMinY = ~(1 << 31),
+        tMaxX = tMaxY = 1 << 31;
+
+    for (var i = 0, il = tRecords.length; i < il; i++) {
+      var tPoint = tRecords[i].point;
+      if (tPoint) {
+        tMinX = tMinX < tPoint.x ? tMinX : tPoint.x;
+        tMinY = tMinY < tPoint.y ? tMinY : tPoint.y;
+        tMaxX = tMaxX > tPoint.x ? tMaxX : tPoint.x;
+        tMaxY = tMaxY > tPoint.y ? tMaxY : tPoint.y;
+      }
+    }
+    return new global.benri.geometry.Rect(
+                    new Point(tMinX, tMinY),
+                    tMaxX - tMinX, tMaxY - tMinY);
   };
 
   /**
