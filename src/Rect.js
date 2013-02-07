@@ -95,6 +95,7 @@
       this.width = tMaxX;
       this.height = tMaxY;
     }
+    return this;
   };
 
   /**
