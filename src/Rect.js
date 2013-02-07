@@ -97,4 +97,19 @@
     }
   };
 
+  /**
+   * Check whether this rect has the same value as the given rect.
+   * @param {benri.geometry.Rect} pRect
+   * @return {boolean} True if the rects have the same value.
+   */
+  Rect.prototype.equals = function(pRect) {
+    if (pRect && pRect.origin.x === this.origin.x
+      && pRect.origin.y === this.origin.y
+      && pRect.width === this.width
+      && pRect.height === this.height) {
+      return true;
+    }
+    return false;
+  };
+
 }(this));
