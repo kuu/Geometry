@@ -9,6 +9,7 @@
 
   var benri = global.benri;
   var Math = global.Math;
+  var Point = benri.geometry.Point;
 
   benri.geometry.Matrix2D = Matrix2D;
 
@@ -246,7 +247,7 @@
    * @return {benri.geometry.Point} The resulting Point.
    */
   Matrix2D.prototype.getPoint = function(pX, pY) {
-    return new benri.geometry.Point(
+    return new Point(
       pX * this.a + pX * this.c + this.e,
       pY * this.b + pY * this.d + this.f
     );
@@ -273,6 +274,127 @@
    */
   Matrix2D.prototype.toCSSString = function() {
     return 'matrix3d(' + this.a + ',' + this.b + ',0,0,' + this.c + ',' + this.d + ',0,0,0,0,1,0,' + this.e + ',' + this.f + ',0,1)';
+  };
+
+  function setTransform(pArray) {
+    this.matrix.fill(pArray);
+    this.onMatrixChange();
+  }
+
+  function resetTransform() {
+    this.matrix.identity();
+    this.onMatrixChange();
+  }
+
+  function transform(pMatrix) {
+    this.matrix.multiply(pMatrix);
+    this.onMatrixChange();
+  }
+
+  function translate(pX, pY) {
+    this.matrix.translate(pX, pY);
+    this.onMatrixChange();
+  }
+
+  function rotate(pRadians) {
+    this.matrix.rotate(pRadians);
+    this.onMatrixChange();
+  }
+
+  function rotateInDegrees(pDegrees) {
+    this.matrix.rotateInDegrees(pDegrees);
+    this.onMatrixChange();
+  }
+
+  function scale(pX, pY) {
+    this.matrix.scale(pX, pY);
+    this.onMatrixChange();
+  }
+
+  function skew(pX, pY) {
+    this.matrix.skew(pX, pY);
+    this.onMatrixChange();
+  }
+
+  function setX(pX) {
+    this.matrix.e = pX;
+    this.onMatrixChange();
+  }
+
+  function setY(pY) {
+    this.matrix.f = pY;
+    this.onMatrixChange();
+  }
+
+  function getX() {
+    return this.matrix.e;
+  }
+
+  function getY() {
+    return this.matrix.f;
+  }
+
+  function getRotation() {
+    return this.matrix.getRotation();
+  }
+
+  function getRotationInDegrees() {
+    return this.matrix.getRotationInDegrees();
+  }
+
+  function getScaleX() {
+    return this.matrix.getScaleX();
+  }
+
+  function getScaleY() {
+    return this.matrix.getScaleY();
+  }
+
+
+  function dummyMatrixChange() {}
+
+  /**
+   * Extends the given object to include
+   * functions that allow you to modify
+   * a matrix local to the object.
+   * Note that you must call Matrix2D.initExtention as well
+   * to finish the extention.
+   * You can listen to changes to the matrix
+   * by overriding the given objects onMatrixChange
+   * function. That function takes no parameters
+   * however the matrix property of the object
+   * will be the updated matrix.
+   * @param  {Object} pObject The object to extend.
+   */
+  Matrix2D.extend = function(pObject) {
+    pObject.setTransform = setTransform;
+    pObject.resetTransform = resetTransform;
+    pObject.transform = transform;
+    pObject.translate = translate;
+    pObject.rotate = rotate;
+    pObject.rotateInDegrees = rotateInDegrees;
+    pObject.scale = scale;
+    pObject.skew = skew;
+    pObject.getX = getX;
+    pObject.getY = getY;
+    pObject.setX = setX;
+    pObject.setY = setY;
+    pObject.getRotation = getRotation;
+    pObject.getRotationInDegrees = getRotationInDegrees;
+    pObject.getScaleX = getScaleX;
+    pObject.getScaleY = getScaleY;
+
+    pObject.onMatrixChange = dummyMatrixChange;
+  };
+
+  /**
+   * Initialize an object to modifying a matrix
+   * that was extended by Matrix2D.extend.
+   * Adds the matrix property to the object.
+   * @param  {Object} pObject The object to initialize.
+   */
+  Matrix2D.initExtention = function(pObject) {
+    pObject.matrix = new Matrix2D();
   };
 
 }(this));
