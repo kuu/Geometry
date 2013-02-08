@@ -45,7 +45,7 @@
    * @return {benri.geometry.Rect} The clone.
    */
   Rect.prototype.clone = function() {
-    return new Rect(this.origin, this.width, this.height);
+    return new Rect(new Point(this.origin.x, this.origin.y), this.width, this.height);
   };
 
   /**
@@ -85,16 +85,32 @@
 
       tPointA = new Point(this.origin.x + this.width,
                         this.origin.y + this.height);
-      tPointB = new Point(pRect.x + pRect.width,
-                        pRect.y + pRect.height);
-      tMmaxX = tPointA.x > tPointB.x ? tPointA.x : tPointB.x;
-      tMmaxY = tPointA.y > tPointB.y ? tPointA.y : tPointB.y;
+      tPointB = new Point(pRect.origin.x + pRect.width,
+                        pRect.origin.y + pRect.height);
+      tMaxX = tPointA.x > tPointB.x ? tPointA.x : tPointB.x;
+      tMaxY = tPointA.y > tPointB.y ? tPointA.y : tPointB.y;
 
       this.origin.x = tMinX;
       this.origin.y = tMinY;
-      this.width = tMaxX;
-      this.height = tMaxY;
+      this.width = tMaxX - tMinX;
+      this.height = tMaxY - tMinY;
     }
+    return this;
+  };
+
+  /**
+   * Check whether this rect has the same value as the given rect.
+   * @param {benri.geometry.Rect} pRect
+   * @return {boolean} True if the rects have the same value.
+   */
+  Rect.prototype.equals = function(pRect) {
+    if (pRect && pRect.origin.x === this.origin.x
+      && pRect.origin.y === this.origin.y
+      && pRect.width === this.width
+      && pRect.height === this.height) {
+      return true;
+    }
+    return false;
   };
 
 }(this));
