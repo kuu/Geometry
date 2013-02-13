@@ -53,8 +53,10 @@
   Path.prototype.getBoundingRect = function() {
 
     var tRecords = this.records, tPoint,
-        tMinX = tMinY = ~(1 << 31),
-        tMaxX = tMaxY = 1 << 31;
+        tMinX = ~(1 << 31),
+        tMinY = ~(1 << 31),
+        tMaxX = 1 << 31,
+        tMaxY = 1 << 31;
 
     for (var i = 0, il = tRecords.length; i < il; i++) {
       var tPoint = tRecords[i].point;
