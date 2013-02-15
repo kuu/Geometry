@@ -118,9 +118,9 @@
     var tThatF = pThat.f;
 
     this.a = tThisA * tThatA + tThisC * tThatB;
-    this.b = tThisA * tThatB + tThisB * tThatD;
+    this.b = tThisB * tThatA + tThisD * tThatB;
     this.c = tThisA * tThatC + tThisC * tThatD;
-    this.d = tThisD * tThatD + tThisB * tThatC;
+    this.d = tThisB * tThatC + tThisD * tThatD;
     this.e = tThisA * tThatE + tThisC * tThatF + tThisE;
     this.f = tThisB * tThatE + tThisD * tThatF + tThisF;
   };
