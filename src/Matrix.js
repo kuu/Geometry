@@ -56,6 +56,21 @@
   };
 
   /**
+   * Converts this matrix to an array.
+   * @return {Array.<number>} The data.
+   */
+  Matrix2D.prototype.getArray = function() {
+    return [
+        this.a,
+        this.b,
+        this.c,
+        this.d,
+        this.e,
+        this.f
+      ];
+  };
+
+  /**
    * Sets this matrix to the identity matrix.
    */
   Matrix2D.prototype.identity = function() {
