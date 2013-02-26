@@ -135,12 +135,23 @@
   };
 
   Matrix2D.prototype.getRotation = function() {
+    var tCos, tTan;
     if (this.d !== 0) {
-      return Math.atan(this.b / this.d);
+      tCos = this.d;
+      tTan = this.b / tCos;
     } else if (this.a !== 0) {
-      return Math.atan(-this.c / this.a);
+      tCos = this.a;
+      tTan = -this.c / tCos;
     } else {
       return 0;
+    }
+
+    if (tCos < 0) {
+        return Math.PI - Math.atan(tTan); // Math.PI
+    } else if (this.c < 0) {
+        return Math.PI*2 - Math.atan(tTan); // Math.PI*2
+    } else {
+        return -Math.atan(tTan);
     }
   };
 
