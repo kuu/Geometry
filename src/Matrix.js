@@ -138,20 +138,20 @@
     var tCos, tTan;
     if (this.d !== 0) {
       tCos = this.d;
-      tTan = this.b / this.d;
+      tTan = this.b / tCos;
     } else if (this.a !== 0) {
       tCos = this.a;
-      tTan = -this.c / this.a;
+      tTan = -this.c / tCos;
     } else {
       return 0;
     }
 
     if (tCos < 0) {
-        return Math.atan(tTan) + 3.141592653589793; // Math.PI
+        return Math.PI - Math.atan(tTan); // Math.PI
     } else if (this.c < 0) {
-        return Math.atan(tTan) + 6.283185307179586; // Math.PI*2
+        return Math.PI*2 - Math.atan(tTan); // Math.PI*2
     } else {
-        return Math.atan(tTan);
+        return -Math.atan(tTan);
     }
   };
 
