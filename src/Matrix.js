@@ -274,8 +274,8 @@
    */
   Matrix2D.prototype.getPoint = function(pX, pY) {
     return new Point(
-      pX * this.a + pX * this.c + this.e,
-      pY * this.b + pY * this.d + this.f
+      pX * this.a + pY * this.c + this.e,
+      pY * this.d + pX * this.b + this.f
     );
   };
 

@@ -21,23 +21,43 @@
    * @param {number} pHeight The height of the Rect.
    */
   function Rect(pOrigin, pWidth, pHeight) {
-    /**
-     * The origin (top left) of this Rect.
-     * @type {benri.geometry.Point}
-     */
-    this.origin = pOrigin;
+    if (pHeight !== void 0) {
+      /**
+       * The origin (top left) of this Rect.
+       * @type {benri.geometry.Point}
+       */
+      this.origin = pOrigin;
 
-    /**
-     * The width of this Rect.
-     * @type {number}
-     */
-    this.width = pWidth;
+      /**
+       * The width of this Rect.
+       * @type {number}
+       */
+      this.width = pWidth;
 
-    /**
-     * The height of this Rect.
-     * @type {number}
-     */
-    this.height = pHeight;
+      /**
+       * The height of this Rect.
+       * @type {number}
+       */
+      this.height = pHeight;
+    } else {
+      /**
+       * The origin (top left) of this Rect.
+       * @type {benri.geometry.Point}
+       */
+      this.origin = new Point(0, 0);
+
+      /**
+       * The width of this Rect.
+       * @type {number}
+       */
+      this.width = pOrigin;
+
+      /**
+       * The height of this Rect.
+       * @type {number}
+       */
+      this.height = pWidth;
+    }
   }
 
   /**
@@ -65,6 +85,60 @@
 
     return tPath;
   }
+
+  Rect.prototype.transform = function(pMatrix) {
+    var tWidth = this.width;
+    var tHeight = this.height;
+
+    var tTopLeft = this.origin;
+
+    var tX = tTopLeft.x;
+    var tY = tTopLeft.y;
+
+    tTopLeft.transform(pMatrix);
+    var tTopRight = pMatrix.getPoint(tX + tWidth, tY);
+    var tBottomLeft = pMatrix.getPoint(tX, tY + tHeight);
+    var tBottomRight = pMatrix.getPoint(tX + tWidth, tY + tHeight);
+
+    var tArray = [tTopLeft, tTopRight, tBottomLeft, tBottomRight];
+
+    var tMinX = Infinity;
+    var tMinY = Infinity;
+    var tMaxX = -Infinity;
+    var tMaxY = -Infinity;
+
+    var tPoint;
+
+    for (var i = 0; i < 4; i++) {
+      tPoint = tArray[i];
+      tX = tPoint.x;
+      tY = tPoint.y;
+
+      if (tX < tMinX) {
+        tMinX = tX;
+      }
+
+      if (tX > tMaxX) {
+        tMaxX = tX;
+      }
+
+      if (tY < tMinY) {
+        tMinY = tY;
+      }
+
+      if (tY > tMaxY) {
+        tMaxY = tY;
+      }
+    }
+
+    tTopLeft.x = tMinX;
+    tTopLeft.y = tMinY;
+
+    this.width = tMaxX - tMinX;
+    this.height = tMaxY - tMinY;
+
+    return this;
+  };
 
   /**
    * Merge this rect with the given rect and return the new rect.
