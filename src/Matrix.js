@@ -112,6 +112,18 @@
   }
 
   /**
+   * Tests if this is the identity matrix.
+   */
+  Matrix2D.prototype.isIdentity = function() {
+    return (this.a === 1
+        && this.b === 0
+        && this.c === 0
+        && this.d === 1
+        && this.e === 0
+        && this.f === 0);
+  };
+
+  /**
    * Multiply this matrix by another
    * @param  {benri.geometry.Matrix2D} pThat The matrix to multiply by.
    */
@@ -187,10 +199,30 @@
   };
 
   /**
-   * Inverse this matrix
+   * Determinant of this matrix
    */
-  Matrix2D.prototype.inverse = function() {
-    throw new Error();
+  Matrix2D.prototype.determinant = function () {
+    return this.a * this.d + this.b * this.c;
+  };
+
+  /**
+   * Invert this matrix
+   */
+  Matrix2D.prototype.invert = function() {
+    var tThisA = this.a;
+    var tThisB = this.b;
+    var tThisC = this.c;
+    var tThisD = this.d;
+    var tThisE = this.e;
+    var tThisF = this.f;
+    var oneOverDet = 1.0 / this.determinant();
+
+    this.a = tThisD * oneOverDet;
+    this.b = tThisB * oneOverDet;
+    this.c = tThisC * oneOverDet;
+    this.d = tThisA * oneOverDet;
+    this.e = -(tThisE * this.a + tThisF * this.c);
+    this.f = -(tThisE * this.b + tThisF * this.d);
   };
 
   /**
